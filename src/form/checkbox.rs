@@ -4,16 +4,23 @@ use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
+    /// HTML `name` attribute
     pub name: String,
+    /// The callback to be called when the value is changed
     pub callback: Callback<bool>,
     #[prop_or_default]
+    /// Add a `label` tag to the left of the input, is not created if `None` (default: None)
     pub label: Option<String>,
+    /// HTML `checked` attribute on first load (default: false)
+    #[prop_or_default]
+    pub checked: bool,
 }
 
 #[function_component]
 pub fn FormCheckbox(props: &Props) -> Html {
     let callback = props.callback.clone();
     let name = props.name.clone();
+    let checked = props.checked;
 
     let onchange = Callback::from(move |ev: Event| {
         let target = ev.target().unwrap();
@@ -31,7 +38,7 @@ pub fn FormCheckbox(props: &Props) -> Html {
                 html!{}
             }
         }
-        <input type="checkbox" {name} {onchange} />
+        <input type="checkbox" {name} {onchange} {checked}/>
         </>
     }
 }

@@ -8,15 +8,23 @@ use web_sys::HtmlSelectElement;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
-pub struct Props<T: std::cmp::PartialEq + IntoEnumIterator + Display + FromStr> {
+pub struct Props<T: std::cmp::PartialEq + IntoEnumIterator + Display + FromStr + Clone> {
+    /// HTML `name` attribute
     pub name: String,
+    /// The callback to be called when the value is changed
     pub callback: Callback<Option<T>>,
+    /// Add a `label` tag to the left of the input, is not created if `None` (default: None)
     #[prop_or_default]
     pub label: Option<String>,
+    /// The default value selected (default: None)
+    #[prop_or_default]
+    pub default: Option<T>,
 }
 
 #[function_component]
-pub fn FormSelect<T: std::cmp::PartialEq + IntoEnumIterator + Display + FromStr + 'static>(
+pub fn FormSelect<
+    T: std::cmp::PartialEq + IntoEnumIterator + Display + FromStr + Clone + 'static,
+>(
     props: &Props<T>,
 ) -> Html {
     let callback = props.callback.clone();
@@ -27,6 +35,7 @@ pub fn FormSelect<T: std::cmp::PartialEq + IntoEnumIterator + Display + FromStr 
         callback.emit(value);
     };
     let name = props.name.clone();
+    let default = props.default.clone();
 
     html! {
         <>
@@ -45,8 +54,12 @@ pub fn FormSelect<T: std::cmp::PartialEq + IntoEnumIterator + Display + FromStr 
             T::iter().map(|option| {
                 let value = option.to_string();
                 let display_value = value.clone();
+                let selected = match &default {
+                    None => false,
+                    Some(default) => option == *default,
+                };
                 html! {
-                    <option {value}>{display_value}</option>
+                    <option {selected} {value}>{display_value}</option>
                 }
             }).collect::<Html>()
         }
