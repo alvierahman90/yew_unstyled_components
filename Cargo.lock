@@ -1298,7 +1298,7 @@ dependencies = [
 
 [[package]]
 name = "yew_unstyled_components"
-version = "0.1.3"
+version = "0.1.4"
 dependencies = [
  "chrono",
  "js-sys",
