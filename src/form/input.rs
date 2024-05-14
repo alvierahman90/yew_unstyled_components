@@ -14,9 +14,9 @@ pub struct Props {
     /// Add a `label` tag to the left of the input, is not created if `None` (default: None)
     #[prop_or_default]
     pub label: Option<String>,
-    /// HTML `value` attribute (default: "")
+    /// HTML `value` attribute (default: None)
     #[prop_or_default]
-    pub value: String,
+    pub value: Option<String>,
 }
 
 #[function_component]
