@@ -20,13 +20,16 @@ pub struct Props {
 pub fn FormCheckbox(props: &Props) -> Html {
     let callback = props.callback.clone();
     let name = props.name.clone();
-    let checked = props.checked;
+    let counter = use_state(|| 0);
+
+    let checked = (*counter % 2 == 1) ^ props.checked;
 
     let onchange = Callback::from(move |ev: Event| {
         let target = ev.target().unwrap();
         let el = target.unchecked_into::<HtmlInputElement>();
 
         callback.emit(el.checked());
+        counter.set(*counter + 1);
     });
 
     html! {
